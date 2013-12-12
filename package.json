@@ -1,0 +1,42 @@
+{
+  "author": "taijinlee",
+  "name": "expense",
+  "version": "0.0.0",
+  "repository": {
+    "type": "git",
+    "url": "ssh://github.com/taijinlee/expense.git"
+  },
+  "engines": {
+    "node": "~0.10"
+  },
+  "scripts": {
+    "test": "./run test",
+    "blanket": {
+      "pattern": ["app", "lib", "store"],
+      "data-cover-never": "node_modules"
+    }
+  },
+  "dependencies": {
+    "async": "0.2.9",
+    "config": "0.4.33",
+    "express": "3.4.6",
+    "forever": "0.10.10",
+    "less": "1.5.1",
+    "mysql": "2.0.0-rc1",
+    "underscore": "1.5.2",
+    "wrench": "1.5.4",
+    "coveralls": "~2.5.0",
+    "mocha-lcov-reporter": "0.0.1",
+    "blanket": "~1.1.5"
+  },
+  "devDependencies": {
+    "bower": "1.2.7",
+    "jshint": "2.3.0",
+    "mocha": "1.14.0",
+    "should": "2.0.2",
+    "sift": "0.0.12",
+    "sinon": "1.7.3"
+  },
+  "optionalDependencies": {},
+  "private": true
+}

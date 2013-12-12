@@ -1,0 +1,29 @@
+{
+  "name": "expense",
+  "version": "0.0.0",
+  "homepage": "https://github.com/taijinlee/expense",
+  "authors": [
+    "Tai-Jin Lee <taijin@gmail.com>"
+  ],
+  "license": "GPLv3",
+  "private": false,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "async": "~0.2.5",
+    "backbone-amd": "~1.1.0",
+    "bootstrap": "~3.0.2",
+    "jquery": "~2.0.3",
+    "jquery-cookie": "~1.4.0",
+    "json2": "*",
+    "requirejs": "~2.1.9",
+    "requirejs-text": "~2.0.10",
+    "select2": "~3.4.4",
+    "underscore-amd": "~1.5.2"
+  }
+}
