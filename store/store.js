@@ -18,7 +18,7 @@ module.exports = function(type, storeConfig) {
   return {
     createTable: function(tableName, options, callback) { return store.createTable.apply(store, arguments); },
 
-    insert: function(obj, context, callback) { console.log('hhh'); return store.insert.apply(store, arguments); },
+    insert: function(obj, context, callback) { return store.insert.apply(store, arguments); },
     retrieve: function(key, context, options, callback) { return store.retrieve.apply(store, arguments); },
     update: function(criteria, obj, context, callback) { return store.update.apply(store, arguments); },
     upsert: function(criteria, obj, context, callback) { return store.upsert.apply(store, arguments); },
