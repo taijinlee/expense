@@ -2,17 +2,9 @@
 var sinon = require('sinon');
 var should = require('should');
 var _ = require('underscore');
-
-var datastoreConfigs = [
-  { type: 'ram', host: 'none', port: 'none' },
-  { type: 'mongo', host: 'localhost', port: 27017 },
-  // { type: 'mysql', host: 'localhost', port: '3306' },
-];
-
-var stores = {};
+var config = require('config').store;
 
 var doTest = function(store, type) {
-
   describe('store:' + type, function() {
     var context = { database: 'test', collection: 'test' };
 
@@ -27,9 +19,7 @@ var doTest = function(store, type) {
       // delete everything first
       store.destroy({}, context, function(error) {
         // insert the assumed stored data
-        store.insert(data, context, function(error, data) {
-          done(error, data);
-        });
+        store.insert(data, context, done);
       });
     });
 
@@ -113,12 +103,10 @@ var doTest = function(store, type) {
         });
       });
     });
-
   });
 };
 
-_.each(datastoreConfigs, function(config) {
-  stores[config.type] = require(process.env.APP_ROOT + '/store/store.js')(config.type, config);
-
-  doTest(stores[config.type], config.type);
+_.each(['ram', 'mongo'], function(type) {
+  var store = require(process.env.APP_ROOT + '/store/store.js')(type, config[type]);
+  doTest(store, type);
 });
