@@ -2,7 +2,6 @@ var async = require('async');
 var authConfig = require('config').auth;
 var tokenizer = require(process.env.APP_ROOT + '/lib/tokenizer.js');
 
-
 module.exports = function(store) {
   var AuthModel = require(process.env.APP_ROOT + '/models/auth.js')(store);
   var UserModel = require(process.env.APP_ROOT + '/models/user.js')(store);
