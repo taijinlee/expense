@@ -1,4 +1,3 @@
-
 var wrench = require('wrench');
 var fs = require('fs');
 var _ = require('underscore');
