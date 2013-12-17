@@ -1,5 +1,4 @@
-
-if (process.env.NODE_ENV === undefined) { throw new Error('NODE_ENV not set. Try \'prod\' or \'dev\'.'); }
+if (process.env.NODE_ENV === undefined) { throw new Error('NODE_ENV not set. Try \'production\' or \'dev\'.'); }
 if (process.env.APP_ROOT === undefined) { throw new Error('APP_ROOT not set. Try ~/expense or /service/expense'); }
 
 var express = require('express');
