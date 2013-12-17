@@ -6,14 +6,14 @@ var mongo = require('mongodb');
 var _ = require('underscore');
 
 module.exports = function(storeConfig) {
-  var pool = mysql.createPool({
-    host: storeConfig.host,
-    user: storeConfig.user,
-    password: storeConfig.password,
-  });
-
   var _openDb = function(callback) {
-    return pool.getConnection(callback);
+    var conn = mysql.createConnection({
+      host: storeConfig.host,
+      user: storeConfig.user,
+      password: storeConfig.password
+    });
+
+    return callback(null, conn);
   };
 
   var getStackTrace = function() {
@@ -44,7 +44,7 @@ module.exports = function(storeConfig) {
       var database = getDatabase(context);
       var keys = _.keys(obj);
       var values = _.values(obj);
-      var queryValues = [database].concat(keys, values);
+      var queryValues = [database, keys, values];
       conn.query('INSERT INTO ?? (??) VALUES (?)', queryValues, function(error, results) {
         if (error) { return callback(error, stackTrace); }
         return callback(null, results);
@@ -55,7 +55,7 @@ module.exports = function(storeConfig) {
   var retrieve =  function(criteria, context, options, callback) {
     options = options || {};
     options.limit = 1;
-    return query(criteria, context, options, function(error, itmes) {
+    return query(criteria, context, options, function(error, items) {
       if (error) { return callback(error); }
       return callback(null, items[0]);
     });
@@ -80,7 +80,10 @@ module.exports = function(storeConfig) {
     });
   };
 
-  var upsert = function(criteria, obj, context, callback) { };
+  var upsert = function(criteria, obj, context, callback) {
+    // not implemented
+    callback(null, null);
+  };
 
   var destroy = function(criteria, context, callback) {
     var stackTrace = getStackTrace();
@@ -111,9 +114,13 @@ module.exports = function(storeConfig) {
       if (where.sql) {
         query += ' WHERE ' + where.sql;
       }
+
+      if (options.limit) {
+        query += ' LIMIT ' + options.limit;
+      }
+
       conn.query(query, queryValues, function(error, results) {
         if (error) { return callback(error, stackTrace); }
-        console.log(results);
         return callback(null, results);
       });
     });

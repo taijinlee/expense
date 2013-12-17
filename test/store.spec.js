@@ -26,16 +26,17 @@ var doTest = function(store, type) {
 
     describe('#insert', function() {
       it('should be able to create an object and immediately fetch it', function(done) {
-
         var _data = _.clone(data);
         _data.id = store.generateId();
 
         store.insert(_data, context, function(error) {
           should.not.exist(error);
 
-          store.retrieve(_data, context, {}, /* options */ function(error, storedData) {
+          store.retrieve({ id: _data.id }, context, {}, /* options */ function(error, storedData) {
             should.not.exist(error);
-            storedData.should.eql(_data);
+            _.each(_.keys(_data), function(key) {
+              storedData[key].should.eql(_data[key])
+            });
             done();
           });
         });
@@ -106,7 +107,7 @@ var doTest = function(store, type) {
   });
 };
 
-_.each(['ram', 'mongo'], function(type) {
+_.each(['ram', 'mongo', 'mysql'], function(type) {
   var store = require(process.env.APP_ROOT + '/store/store.js')(type, config[type]);
   doTest(store, type);
 });
