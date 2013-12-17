@@ -38,7 +38,7 @@ case $1 in
     buildProduction
     ;;
 
-  'dev' )
+  'development' )
     buildCommon
     NODE_ENV=development APP_ROOT=${APP_ROOT} USER=${USER} node app/server.js
     ;;
