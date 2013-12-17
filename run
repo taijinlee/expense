@@ -14,8 +14,8 @@ buildCommon() {
   fi
 }
 
-buildProd() {
-  NODE_ENV=prod APP_ROOT=${APP_ROOT} GIT_REV=${GIT_REV} node config/build/webBuild.js
+buildProduction() {
+  NODE_ENV=production APP_ROOT=${APP_ROOT} GIT_REV=${GIT_REV} node config/build/webBuild.js
 }
 
 
@@ -35,27 +35,27 @@ case $1 in
 
 
   'build' )
-    buildProd
+    buildProduction
     ;;
 
   'dev' )
     buildCommon
-    NODE_ENV=dev APP_ROOT=${APP_ROOT} USER=${USER} node app/server.js
+    NODE_ENV=development APP_ROOT=${APP_ROOT} USER=${USER} node app/server.js
     ;;
 
-  'prod' )
+  'production' )
     buildCommon
-    buildProd
+    buildProduction
 
-    NODE_ENV=prod APP_ROOT=${APP_ROOT} GIT_REV=${GIT_REV} ./node_modules/forever/bin/forever stop app/server.js
-    NODE_ENV=prod APP_ROOT=${APP_ROOT} GIT_REV=${GIT_REV} ./node_modules/forever/bin/forever start -l /service/log/forever.log -o /service/log/app.log -e /service/log/app-stderr.log -p /service/tmp --append app/server.js
+    NODE_ENV=production APP_ROOT=${APP_ROOT} GIT_REV=${GIT_REV} ./node_modules/forever/bin/forever stop app/server.js
+    NODE_ENV=production APP_ROOT=${APP_ROOT} GIT_REV=${GIT_REV} ./node_modules/forever/bin/forever start -l /service/log/forever.log -o /service/log/app.log -e /service/log/app-stderr.log -p /service/tmp --append app/server.js
     ;;
 
-  'prod-test' )
+  'production-test' )
     buildCommon
-    buildProd
+    buildProduction
 
-    NODE_ENV=prod APP_ROOT=${APP_ROOT} GIT_REV=${GIT_REV} USER=${USER} node app/server.js
+    NODE_ENV=production APP_ROOT=${APP_ROOT} GIT_REV=${GIT_REV} USER=${USER} node app/server.js
     ;;
 
 

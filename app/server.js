@@ -3,11 +3,10 @@ if (process.env.NODE_ENV === undefined) { throw new Error('NODE_ENV not set. Try
 if (process.env.APP_ROOT === undefined) { throw new Error('APP_ROOT not set. Try ~/expense or /service/expense'); }
 
 var express = require('express');
-var config = require(process.env.APP_ROOT + '/config/config.js')();
+var config = require('config');
 var logger = require(process.env.APP_ROOT + '/lib/logger.js')();
 var app = express();
 var server = require('http').createServer(app);
-var io = require('socket.io').listen(server);
 
 // overwriting default date token definition
 express.logger.token('date', function() { return Date().replace(/GMT-\d{4} /, ''); });
@@ -21,12 +20,8 @@ app.configure(function() {
 });
 
 // services
-var datastore = 'mongo';
+var datastore = 'mysql';
 var store = require(process.env.APP_ROOT + '/store/store.js')(datastore, config.store.mongo);
-var history = require(process.env.APP_ROOT + '/history/history.js')(store);
-
-// globally applied middleware
-var authMiddleware = require(process.env.APP_ROOT + '/app/middleware/auth.js')(store);
 
 // load config based on environment
 // specific to development
@@ -40,15 +35,6 @@ app.configure('dev', function () {
     return next();
   });
   app.use(express['static'](process.env.APP_ROOT + process.env.WEB_ROOT));
-  app.use(function(req, res, next) {
-    res.locals.responder = require(process.env.APP_ROOT + '/lib/responder.js')();
-    res.locals.responder.initialize(res);
-    return next();
-  });
-
-  app.use(authMiddleware.getTokenUserId);
-  app.use(app.router);
-  app.use(function(error, req, res, next) { res.locals.responder.send(error); });
 });
 
 // specific to production
@@ -59,7 +45,12 @@ app.configure('prod', function () {
   app.use(express['static'](process.env.APP_ROOT + process.env.WEB_ROOT, {
     maxAge: 31536000000 // one year
   }));
+});
 
+// globally applied middleware
+var authMiddleware = require(process.env.APP_ROOT + '/app/middleware/auth.js')(store);
+// finisher for all environments
+app.configure(function() {
   app.use(function(req, res, next) {
     res.locals.responder = require(process.env.APP_ROOT + '/lib/responder.js')();
     res.locals.responder.initialize(res);
@@ -72,8 +63,7 @@ app.configure('prod', function () {
 });
 
 // load routes
-require(process.env.APP_ROOT + '/app/routes.js')(app, store, history);
-require(process.env.APP_ROOT + '/app/sockets.js')(store, history, io);
+require(process.env.APP_ROOT + '/app/routes.js')(app, store);
 // start listening
 server.listen(config.app.port);
 
