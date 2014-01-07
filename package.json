@@ -12,16 +12,19 @@
   "scripts": {
     "test": "./run test",
     "blanket": {
-      "pattern": ["app", "lib", "store"],
+      "pattern": [
+        "app",
+        "lib",
+        "store"
+      ],
       "data-cover-never": "node_modules"
     }
   },
   "dependencies": {
     "async": "0.2.9",
     "config": "0.4.33",
+    "express": "3.4.7",
     "forever": "0.10.10",
-    "koa": "0.2.1",
-    "koa-logger": "1.1.0",
     "less": "1.5.1",
     "mysql": "2.0.0-rc1",
     "mongodb": "1.3.19",

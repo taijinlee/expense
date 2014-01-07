@@ -1,7 +1,8 @@
 module.exports = {
   app: {
     port: 4000,
-    host: 'localhost:4000'
+    host: 'localhost:4000',
+    cookieSecret: 'abc'
   },
 
   auth: {
@@ -18,6 +19,8 @@ module.exports = {
 
     mysql: {
       host: 'localhost',
+      user: 'root',
+      password: '',
       port: 3306,
       maxMillisOnWarn: 5000
     }

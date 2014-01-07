@@ -3,7 +3,7 @@
 APP_ROOT=`pwd`
 GIT_REV=`git rev-parse --verify HEAD`
 USER=`whoami`+dev
-NODE_VERSION=v0.10.23
+NODE_VERSION=v0.10.24
 PATH=${PATH}:${APP_ROOT}/vendor/nvm/${NODE_VERSION}/bin
 export PATH
 
