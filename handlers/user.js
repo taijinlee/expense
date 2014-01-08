@@ -33,6 +33,9 @@ module.exports = function(store) {
     });
   };
 
+  user.retrieve = function(userId, done) {
+    userModel.retrieve({ id: userId }, done);
+  };
 
   return user;
 };
