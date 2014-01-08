@@ -8,11 +8,19 @@ module.exports = function(store) {
 
   var user = {};
   user.create = function(data, done) {
+    var orgData = {
+      id: store.generateId(),
+      name: '',
+      domain: ''
+    };
+
     var userData = {
       id: store.generateId(),
+      organizationId: orgData.id,
       email: data.email,
       name: data.name,
-      role: 'orgAdmin'
+      role: 'orgAdmin',
+      invitedBy: ''
     };
 
     var authData = {

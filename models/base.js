@@ -13,7 +13,9 @@ var Base = module.exports = function(store, context, schema) {
 _.extend(Base.prototype, {
   insert: function(obj, callback) {
     if (!this._verifySchema(obj, false)) { return callback(this._schemaInvalidError); }
-    return this.store.insert(this._sanitize(obj), this.context, callback);
+    var sanitizedObj = this._sanitize(obj);
+    sanitizedObj.createdAt = sanitizedObj.updatedAt = this._now();
+    return this.store.insert(sanitizedObj, this.context, callback);
   },
 
   retrieve: function(criteria, callback) {
@@ -22,7 +24,9 @@ _.extend(Base.prototype, {
 
   update: function(criteria, obj, callback) {
     if (!this._verifySchema(obj, false)) { return callback(this._schemaInvalidError); }
-    return this.store.update(criteria, this._sanitize(obj), this.context, callback);
+    var sanitizedObj = this._sanitize(obj);
+    sanitizedObj.updatedAt = this._now();
+    return this.store.update(criteria, sanitizedObj, this.context, callback);
   },
 
   upsert: function(criteria, obj, callback) {
@@ -47,7 +51,7 @@ _.extend(Base.prototype, {
     return _.every(this.schemaKeys, function(schemaKey) {
       if (!isExpectId && schemaKey === 'id') { return true; }
       var value = obj[schemaKey];
-      if (value === undefined || value === null) { return false; }
+      if (value === undefined || value === null) { console.log(schemaKey); return false; }
       return true;
     });
   },
@@ -55,6 +59,8 @@ _.extend(Base.prototype, {
   _sanitize: function(obj) {
     return _.pick(obj, this.schemaKeys);
   },
+
+  _now: function() { return Math.floor(new Date().getTime() / 1000); },
 
   _schemaInvalidError: new Error('schema invalid')
 });
